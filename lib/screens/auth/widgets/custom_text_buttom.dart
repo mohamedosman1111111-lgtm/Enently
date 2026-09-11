@@ -1,3 +1,4 @@
+import 'package:evently/utils/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class CustomTextBottom extends StatelessWidget {
@@ -9,6 +10,6 @@ class CustomTextBottom extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
         onTap:onTap,
-        child: Text(text,style: Theme.of(context).textTheme.bodySmall,));
+        child: Text(text,style:TextStyle(fontSize: 14,fontWeight: FontWeight.w600,color: AppColors.primaryBlue),));
   }
 }
