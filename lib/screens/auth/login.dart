@@ -41,8 +41,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Text("Login to your account",style: Theme.of(context).textTheme.labelLarge,),
               ),
               SizedBox(height: MediaQuery.of(context).size.height*0.024,),
-              CustomTextField(hintText: "Enter your email",perfixIcon: Icons.email_outlined,controller: emailController,validator: Validators.validateEmail,),
-              CustomTextField(hintText: "Enter your password",perfixIcon: Icons.lock,suffixIcon: Icon(Icons.visibility_off),controller: passwordController,validator: Validators.validatePassword,),
+              CustomTextField(hintText: "Enter your email",perfixIcon: Icon(Icons.email_outlined),controller: emailController,validator: Validators.validateEmail,),
+              CustomTextField(hintText: "Enter your password",perfixIcon: Icon(Icons.lock),suffixIcon: Icon(Icons.visibility_off),controller: passwordController,validator: Validators.validatePassword,),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Row(

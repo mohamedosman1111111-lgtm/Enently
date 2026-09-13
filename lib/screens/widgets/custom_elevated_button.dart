@@ -11,13 +11,7 @@ class CustomElevatedButton extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.primaryBlue,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-          padding: EdgeInsets.all(12)
-        ),
+
           onPressed: onPress,
           child: Text(hintText,style: Theme.of(context).textTheme.labelMedium,),),
     );

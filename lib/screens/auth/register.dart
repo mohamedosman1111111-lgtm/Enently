@@ -44,10 +44,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 child: Text("Create your account",style: Theme.of(context).textTheme.labelLarge,),
               ),
               SizedBox(height: MediaQuery.of(context).size.height*0.024,),
-              CustomTextField(hintText: "Enter your name",perfixIcon: Icons.person_outline,controller: nameController,validator:Validators.validateName,),
-              CustomTextField(hintText: "Enter your email",perfixIcon: Icons.email_outlined,controller: emailController,validator:Validators.validateEmail),
-              CustomTextField(hintText: "Enter your password",perfixIcon: Icons.lock,suffixIcon: Icon(Icons.visibility_off,),controller: passwordController,validator:Validators.validatePassword),
-              CustomTextField(hintText: "Confirm your password",perfixIcon: Icons.lock,suffixIcon: Icon(Icons.visibility_off),controller: passwordConfirmtionController,validator: Validators.validatePasswordConformtion(passwordController),),
+              CustomTextField(hintText: "Enter your name",perfixIcon: Icon(Icons.person_outline,),controller: nameController,validator:Validators.validateName,),
+              CustomTextField(hintText: "Enter your email",perfixIcon: Icon(Icons.email_outlined),controller: emailController,validator:Validators.validateEmail),
+              CustomTextField(hintText: "Enter your password",perfixIcon:Icon(Icons.lock,), suffixIcon: Icon(Icons.visibility_off,),controller: passwordController,validator:Validators.validatePassword),
+              CustomTextField(hintText: "Confirm your password",perfixIcon: Icon(Icons.lock,),suffixIcon: Icon(Icons.visibility_off),controller: passwordConfirmtionController,validator: Validators.validatePasswordConformtion(passwordController),),
 
               SizedBox(height: MediaQuery.of(context).size.height*0.055,),
               CustomElevatedButton(onPress: (){
