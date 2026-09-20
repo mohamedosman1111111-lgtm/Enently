@@ -13,7 +13,7 @@ class CustomElevatedButton extends StatelessWidget {
       child: ElevatedButton(
 
           onPressed: onPress,
-          child: Text(hintText,style: Theme.of(context).textTheme.labelMedium,),),
+          child: Text(hintText,style:TextStyle(fontSize: 20,fontWeight: FontWeight.w500,color: AppColors.white),),),
     );
   }
 }

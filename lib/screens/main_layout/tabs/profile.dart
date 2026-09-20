@@ -1,6 +1,9 @@
+import 'package:easy_localization/easy_localization.dart';
+import 'package:evently/Providers/theme_provider.dart';
 import 'package:evently/utils/app_assets.dart';
 import 'package:evently/utils/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart' show Provider;
 class Profile extends StatefulWidget {
   const Profile({super.key});
 
@@ -9,9 +12,9 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
- bool _isDarkEnable=false;
   @override
   Widget build(BuildContext context) {
+    var themeProvider=Provider.of<AppThemeProvider>(context);
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -24,24 +27,28 @@ class _ProfileState extends State<Profile> {
             Text("johnsafwat.route@gmail.com",style: Theme.of(context).textTheme.labelSmall),
             SizedBox(height: MediaQuery.of(context).size.height*0.0345,),//32
             Card(
-              color: AppColors.white,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
-              ),
+
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 8),
                 child: SizedBox(
-                  height: 40,
+                  height: MediaQuery.of(context).size.height*0.044, //40
                   child: Row(
                     children: [
-                      Text("Dark mode",style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: AppColors.mainText),),
+                      Text("dark_mode".tr(),style: Theme.of(context).textTheme.titleMedium),
                       Spacer(),
                       Switch(
                         activeColor:AppColors.mainTextdark,
-                          value: _isDarkEnable, onChanged: (newvalue){
-                        setState(() {
-                          _isDarkEnable=newvalue;
-                        });
+                          value:themeProvider.isDark()
+                          ,
+                          onChanged: (isDarkEnable){
+
+                          if(isDarkEnable){
+                          themeProvider.changeTheme(ThemeMode.dark);}
+                          else{
+                            themeProvider.changeTheme(ThemeMode.light);
+                          }
+
+
                       }
                       ),
                     ],
@@ -51,24 +58,27 @@ class _ProfileState extends State<Profile> {
             ),
             SizedBox(height: MediaQuery.of(context).size.height*0.018,),
             Card(
-              color: AppColors.white,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
-              ),
+
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 8),
                 child: SizedBox(
                   height: 40,
                   child: Row(
                     children: [
-                      Text("Language",style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: AppColors.mainText),),
+                      Text("language".tr(),style: Theme.of(context).textTheme.titleMedium,),
                       Spacer(),
                       DropdownButton(
-                        icon:Icon(Icons.arrow_forward_ios_outlined,color: AppColors.primaryBlue,) ,
+                        value: context.locale.languageCode == "ar" ? "العربية" : "English",
+                        //TODO Bad in Light Theme
+                       dropdownColor: Theme.of(context).primaryColor,
+                        icon:Icon(Icons.arrow_forward_ios_outlined,color: Theme.of(context).primaryColor,) ,
                          underline: Container(),
-                          items:["English", "Arabic"].map((val)=>DropdownMenuItem(value: val,child: Text(val))).toList(),
+                          items:["English", "العربية"].map((val)=>DropdownMenuItem(value: val,child: Text(val))).toList(),
                           onChanged: (newlang){
-                            print(newlang);
+                         if(newlang==null) return;
+                         context.setLocale(
+                           newlang=="العربية"?Locale("ar"):Locale("en")
+                         );
                           }
                       )
 
@@ -79,17 +89,14 @@ class _ProfileState extends State<Profile> {
             ),
             SizedBox(height: MediaQuery.of(context).size.height*0.018,),
             Card(
-              color: AppColors.white,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
-              ),
+
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 8),
                 child: SizedBox(
                   height: 40,
                   child: Row(
                     children: [
-                      Text("Logout",style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: AppColors.mainText),),
+                      Text("logout".tr(),style: Theme.of(context).textTheme.titleMedium),
                       Spacer(),
                       Icon(Icons.logout,color: AppColors.errorRed,)
 

@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:evently/models/category_model.dart';
 import 'package:evently/models/event_model.dart';
 import 'package:evently/screens/widgets/custom_event_item.dart';
@@ -23,8 +24,8 @@ class Home extends StatelessWidget {
               Row(
                 children: [
                   Expanded(
-                    child: Text("Welcome Back ✨",style:
-                    TextStyle(fontSize:14,fontWeight: FontWeight.w400 ,color: AppColors.sectext),
+                    child: Text("welcome_back".tr(),style:Theme.of(context).textTheme.labelSmall
+
                     ),
                   ),
                   Icon(Icons.light_mode_outlined),
@@ -33,16 +34,17 @@ class Home extends StatelessWidget {
                 ],
               ),
               SizedBox(height: MediaQuery.of(context).size.height*0.005,), //4
-              Text("Mohamed Fawzy",style: Theme.of(context).textTheme.labelMedium!.copyWith(color:AppColors.mainText),),
+              Text("Mohamed Fawzy",style: Theme.of(context).textTheme.labelMedium,),
               SizedBox(height: MediaQuery.of(context).size.height*0.026,),//24
               CustomTabBar(
-                categories: [CategoryModel(id: "1",name: "All",icon: Icons.border_all,image: AppAssets.sportsLight),...CategoryModel.categories,],
-                selectedbg: AppColors.primaryBlue,
-                selectedfg: AppColors.white ,
-                unselectedbg:AppColors.white ,
-               unselectedfg: AppColors.mainText,
-                selectedicon:AppColors.white ,
-                unselectedicon:AppColors.primaryBlue ,
+                categories: [CategoryModel(id: "1",name: "all",icon: Icons.border_all,image: AppAssets.sportsLight),...CategoryModel.categories,],
+                //TODO selected fr should be white
+                selectedbg: Theme.of(context).primaryColor,
+                unselectedbg:Theme.of(context).scaffoldBackgroundColor ,
+                selectedfg: Theme.of(context).scaffoldBackgroundColor ,
+               unselectedfg: Theme.of(context).textTheme.bodySmall!.color!,
+                selectedicon:Theme.of(context).scaffoldBackgroundColor ,
+                unselectedicon:Theme.of(context).primaryColor ,
                    ),
               Expanded(
                 child: Padding(

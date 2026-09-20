@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:evently/models/category_model.dart';
 import 'package:evently/models/event_model.dart';
 import 'package:evently/screens/widgets/custom_event_item.dart';
@@ -12,7 +13,10 @@ class Favorite extends StatelessWidget {
     return  SafeArea(
       child: Column(
         children: [
-          CustomTextField(hintText: "Search for event",suffixIcon: Icon(Icons.search,color: AppColors.primaryBlue,),),
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: CustomTextField(hintText: "search_for_event".tr(),suffixIcon: Icon(Icons.search,color: AppColors.primaryBlue,),),
+          ),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.only(left: 16,right: 16,top: 8),

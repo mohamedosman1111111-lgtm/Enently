@@ -1,4 +1,6 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:evently/models/category_model.dart';
+import 'package:evently/utils/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class CustomTabItem extends StatelessWidget {
@@ -31,6 +33,7 @@ class CustomTabItem extends StatelessWidget {
       decoration: BoxDecoration(
         color: isSelected?selectedbg:unselectedbg,
         borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: AppColors.primaryBlue,width: 1.5)
 
       ),
       child: Row(
@@ -38,7 +41,7 @@ class CustomTabItem extends StatelessWidget {
         children: [
           Icon(category.icon,color: isSelected?selectedicon:unselectedicon,),
           SizedBox(width:MediaQuery.of(context).size.height*0.009,),
-          Text(category.name,style: TextStyle(color: isSelected?selectedfg:unselectedfg,),)
+          Text(category.name.tr(),style: TextStyle(color: isSelected?selectedfg:unselectedfg,),)
         ],
       ),
     );

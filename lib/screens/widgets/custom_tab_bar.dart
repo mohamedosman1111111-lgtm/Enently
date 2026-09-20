@@ -34,7 +34,7 @@ class _CustomTabBarState extends State<CustomTabBar> {
         child: TabBar(
             onTap: (newindex){
               setState(() {
-                selectedIndex=newindex-1;
+                selectedIndex=newindex;
               });
 
             },
@@ -45,7 +45,9 @@ class _CustomTabBarState extends State<CustomTabBar> {
 
             tabs: widget.categories.map((category){
               return CustomTabItem(category: category,
-                isSelected: selectedIndex==CategoryModel.categories.indexOf(category),
+               //fix of error
+               isSelected: selectedIndex==widget.categories.indexOf(category),
+               // isSelected: selectedIndex==CategoryModel.categories.indexOf(category),
                 selectedbg: widget.selectedbg,
                 unselectedbg: widget.unselectedbg,
                 selectedfg: widget.selectedfg,

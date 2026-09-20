@@ -1,6 +1,7 @@
 import 'package:evently/models/event_model.dart';
 import 'package:evently/utils/app_assets.dart';
 import 'package:evently/utils/app_colors.dart';
+import 'package:evently/utils/extention/extentions.dart';
 import 'package:flutter/material.dart';
 
 class CustomEventItem extends StatelessWidget {
@@ -31,7 +32,7 @@ class CustomEventItem extends StatelessWidget {
             Card(
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Text(event.date.toString(),style: Theme.of(context).textTheme.displayMedium),
+                  child: Text(event.date.showMonthWeekDay, style: Theme.of(context).textTheme.displayMedium),
                 )),
             Spacer(),
             Card(

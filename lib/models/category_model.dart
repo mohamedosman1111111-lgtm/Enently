@@ -13,10 +13,10 @@ class CategoryModel{
     required this.image
   });
   static List <CategoryModel> categories=[
-    CategoryModel(id: "1", name: "Sports", icon:Icons.directions_bike, image: AppAssets.sportsLight),
-    CategoryModel(id: "2", name: "Book Club", icon:Icons.menu_book, image: AppAssets.bookClubLight),
-    CategoryModel(id: "3", name: "BrithDay", icon:Icons.cake, image: AppAssets.brithDayLight),
-    CategoryModel(id: "4", name: "Meeting", icon:Icons.computer, image: AppAssets.meetingLight),
-    CategoryModel(id: "5", name: "Exhibition", icon:Icons.collections, image: AppAssets.exhibitionLight),
+    CategoryModel(id: "2", name: "sports", icon:Icons.directions_bike, image: AppAssets.sportsLight),
+    CategoryModel(id: "3", name: "book_club", icon:Icons.menu_book, image: AppAssets.bookClubLight),
+    CategoryModel(id: "4", name: "birthday", icon:Icons.cake, image: AppAssets.brithDayLight),
+    CategoryModel(id: "5", name: "meeting", icon:Icons.computer, image: AppAssets.meetingLight),
+    CategoryModel(id: "6", name: "exhibition", icon:Icons.collections, image: AppAssets.exhibitionLight),
   ];
 }
