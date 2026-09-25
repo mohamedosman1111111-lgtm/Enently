@@ -1,7 +1,10 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:evently/Providers/theme_provider.dart';
+import 'package:evently/screens/auth/login.dart';
 import 'package:evently/utils/app_assets.dart';
 import 'package:evently/utils/app_colors.dart';
+import 'package:evently/utils/firebase_serviecs/firebase_serviecs.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart' show Provider;
 class Profile extends StatefulWidget {
@@ -88,19 +91,22 @@ class _ProfileState extends State<Profile> {
               ),
             ),
             SizedBox(height: MediaQuery.of(context).size.height*0.018,),
-            Card(
+            InkWell(
+              onTap: _logout,
+              child: Card(
 
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 8),
-                child: SizedBox(
-                  height: 40,
-                  child: Row(
-                    children: [
-                      Text("logout".tr(),style: Theme.of(context).textTheme.titleMedium),
-                      Spacer(),
-                      Icon(Icons.logout,color: AppColors.errorRed,)
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 8),
+                  child: SizedBox(
+                    height: 40,
+                    child: Row(
+                      children: [
+                        Text("logout".tr(),style: Theme.of(context).textTheme.titleMedium),
+                        Spacer(),
+                        Icon(Icons.logout,color: AppColors.errorRed,)
 
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -111,5 +117,16 @@ class _ProfileState extends State<Profile> {
         ),
       ),
     );
+  }
+  void _logout()async{
+   await FirebaseAuth.instance.signOut();
+   Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginScreen(),));
+   FirebaseServiecs.Tosta(
+       msg: "Logout Successfully",
+       bgColor: Colors.green
+
+   );
+
+
   }
 }

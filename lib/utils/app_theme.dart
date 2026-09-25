@@ -48,6 +48,7 @@ static ThemeData light=ThemeData(
     displayMedium: TextStyle(fontSize: 16,fontWeight: FontWeight.w600,color: AppColors.primaryBlue),
     labelSmall: TextStyle(fontSize: 14,fontWeight: FontWeight.w400,color: AppColors.sectext), //email in profile
     bodySmall: TextStyle(fontSize: 14,fontWeight: FontWeight.w500,color: AppColors.mainText),
+      displaySmall: TextStyle(fontSize: 14,fontWeight: FontWeight.w600,color: AppColors.mainText),
       titleSmall: TextStyle(fontSize: 14,fontWeight: FontWeight.w600,color: AppColors.primaryBlue)
 
 
@@ -132,6 +133,7 @@ static ThemeData light=ThemeData(
         displayMedium: TextStyle(fontSize: 16,fontWeight: FontWeight.w600,color: AppColors.mainTextdark),
       labelSmall: TextStyle(fontSize: 14,fontWeight: FontWeight.w400,color: AppColors.secTextDark), //email in profile
       bodySmall: TextStyle(fontSize: 14,fontWeight: FontWeight.w500,color: AppColors.white),
+      displaySmall: TextStyle(fontSize: 14,fontWeight: FontWeight.w600,color: AppColors.white),
       titleSmall: TextStyle(fontSize: 14,fontWeight: FontWeight.w600,color: AppColors.mainTextdark)
     ),
     inputDecorationTheme: InputDecorationTheme(

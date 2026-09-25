@@ -6,14 +6,19 @@ import 'package:evently/screens/auth/register.dart';
 import 'package:evently/screens/main_layout/main_layout.dart';
 import 'package:evently/utils/app_routes.dart';
 import 'package:evently/utils/app_theme.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 void main()async{
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
-  runApp(ChangeNotifierProvider(
-    create: (context) => AppThemeProvider(),
+  await Firebase.initializeApp();
+  print('🔥 Firebase OK: ${Firebase.app().options.appId}');
+  final themeProvider=AppThemeProvider();
+  await themeProvider.initTheme();
+  runApp(ChangeNotifierProvider.value(
+    value:  themeProvider,
     child: EasyLocalization(
         child: EventlyApp(),
         supportedLocales: [Locale("en"),Locale("ar")],
@@ -32,7 +37,7 @@ class EventlyApp extends StatelessWidget {
       supportedLocales: context.supportedLocales,
       locale: context.locale,
       debugShowCheckedModeBanner: false,
-      initialRoute:AppRoutes.mainLayout,
+      initialRoute:AppRoutes.login,
       routes: {
         AppRoutes.login: (context) =>  LoginScreen(),
         AppRoutes.register:(context)=> RegisterScreen(),
