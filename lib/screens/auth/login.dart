@@ -2,9 +2,13 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:evently/screens/auth/register.dart';
 import 'package:evently/screens/auth/widgets/Validators.dart';
 import 'package:evently/screens/auth/widgets/custom_text_buttom.dart';
+import 'package:evently/screens/main_layout/main_layout.dart';
 import 'package:evently/screens/widgets/custom_elevated_button.dart';
 import 'package:evently/screens/widgets/custom_text_field.dart';
 import 'package:evently/utils/app_assets.dart';
+import 'package:evently/utils/firebase_serviecs/firebase_serviecs.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 
@@ -61,9 +65,9 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               SizedBox(height: MediaQuery.of(context).size.height*0.052,),
               CustomElevatedButton(onPress: (){
-                if(_formKey.currentState!.validate()){
+                _loginAccount();
 
-                }
+
               },hintText: "login".tr()),
               SizedBox(height: MediaQuery.of(context).size.height*0.052,),
               Row(
@@ -81,8 +85,54 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         ),
       ),
-
     );
 
   }
-}
+  void _loginAccount()async{
+    if(_formKey.currentState!.validate()) {
+      try {
+        UserCredential userCredential=await FirebaseAuth.instance.signInWithEmailAndPassword(
+            email: emailController.text,
+            password: passwordController.text
+        );
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MainLayout(),));
+        FirebaseServiecs.Tosta(
+            msg: "Login Successfully",
+          bgColor: Colors.green
+
+        );
+      } on FirebaseAuthException catch(exception){
+        if(exception.code=="invalid-credential"){
+          FirebaseServiecs.Tosta(
+              msg: "Wrong Email or Password",
+              bgColor: Colors.red
+
+          );
+        }
+        else if(exception.code=="network-request-failed"){
+          FirebaseServiecs.Tosta(
+              msg: "No Internet Connection",
+              bgColor: Colors.red
+
+          );
+        }
+
+        else{
+          FirebaseServiecs.Tosta(
+              msg: "UnExpected Error: ${exception.code}",
+              bgColor: Colors.red
+
+          );
+        }
+      }catch(exception){
+        FirebaseServiecs.Tosta(
+            msg: exception.toString(),
+            bgColor: Colors.red
+
+        );
+      }
+      }
+
+    }
+  }
+
