@@ -28,7 +28,8 @@ class CustomTextField extends StatelessWidget {
       maxLines: maxlines,
       validator: validator,
       controller: controller,
-      cursorColor: AppColors.sectext,
+      style: TextStyle(color: Theme.of(context).primaryColor),
+      cursorColor: Theme.of(context).primaryColor,
       decoration: InputDecoration(
         hintText: hintText,
         hintStyle: Theme.of(context).textTheme.labelSmall,

@@ -41,7 +41,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Image.asset(AppAssets.EventlyLogoLight,color: Theme.of(context).primaryColor),
+              Image.asset(AppAssets.eventlyLogoLight,color: Theme.of(context).primaryColor),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Text("register_title".tr(),style: Theme.of(context).textTheme.labelLarge,),
@@ -114,6 +114,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
               msg: "The account already exists for that email.",
               bgColor: Colors.red
 
+          );
+        }
+        else {
+          FirebaseServiecs.Tosta(
+              msg: "Unexpected Error: ${exception.code}",
+              bgColor: Colors.red
           );
         }
       }catch(exception){

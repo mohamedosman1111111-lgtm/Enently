@@ -40,7 +40,7 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Image.asset(AppAssets.EventlyLogoLight,color: Theme.of(context).primaryColor,),
+              Image.asset(AppAssets.eventlyLogoLight,color: Theme.of(context).primaryColor,),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Text("login_title".tr(),style: Theme.of(context).textTheme.labelLarge,),

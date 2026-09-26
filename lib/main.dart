@@ -4,6 +4,7 @@ import 'package:evently/Providers/theme_provider.dart';
 import 'package:evently/screens/auth/login.dart';
 import 'package:evently/screens/auth/register.dart';
 import 'package:evently/screens/main_layout/main_layout.dart';
+import 'package:evently/screens/splash/splash_screen.dart';
 import 'package:evently/utils/app_routes.dart';
 import 'package:evently/utils/app_theme.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -37,8 +38,9 @@ class EventlyApp extends StatelessWidget {
       supportedLocales: context.supportedLocales,
       locale: context.locale,
       debugShowCheckedModeBanner: false,
-      initialRoute:AppRoutes.login,
+      initialRoute:AppRoutes.splashScreen,
       routes: {
+        AppRoutes.splashScreen: (context) =>  SplashScreen(),
         AppRoutes.login: (context) =>  LoginScreen(),
         AppRoutes.register:(context)=> RegisterScreen(),
         AppRoutes.mainLayout:(context)=> MainLayout(),

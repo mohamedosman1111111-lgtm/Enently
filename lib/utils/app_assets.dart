@@ -1,5 +1,6 @@
 class AppAssets{
-static const String EventlyLogoLight="assets/images/EvenlyLogoLight.png";
+static const String eventlyLogoLight="assets/images/EvenlyLogoLight.png";
+static const String eventlySplashLogo="assets/images/EventlysplashLogo.png";
 static const String AllIcon="assets/images/All_Icon.png";
 static const String sportsLight="assets/images/SportsLight.png";
 static const String bookClubLight="assets/images/BookClubLight.png";

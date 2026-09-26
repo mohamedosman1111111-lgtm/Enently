@@ -49,6 +49,7 @@ static ThemeData light=ThemeData(
     labelSmall: TextStyle(fontSize: 14,fontWeight: FontWeight.w400,color: AppColors.sectext), //email in profile
     bodySmall: TextStyle(fontSize: 14,fontWeight: FontWeight.w500,color: AppColors.mainText),
       displaySmall: TextStyle(fontSize: 14,fontWeight: FontWeight.w600,color: AppColors.mainText),
+
       titleSmall: TextStyle(fontSize: 14,fontWeight: FontWeight.w600,color: AppColors.primaryBlue)
 
 
