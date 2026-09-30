@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:evently/models/user_model.dart';
 import 'package:evently/screens/auth/register.dart';
 import 'package:evently/screens/auth/widgets/Validators.dart';
 import 'package:evently/screens/auth/widgets/custom_text_buttom.dart';
@@ -22,6 +23,13 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   late TextEditingController emailController;
   late TextEditingController passwordController;
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
   @override
   void initState() {
     emailController=TextEditingController();
@@ -95,6 +103,9 @@ class _LoginScreenState extends State<LoginScreen> {
             email: emailController.text,
             password: passwordController.text
         );
+        //why set await before this line while its working without it
+        UserModel user= await FirebaseServiecs.getUserFromFireStore(userCredential.user!.uid);
+        UserModel.loggedUser=user;
         Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MainLayout(),));
         FirebaseServiecs.Tosta(
             msg: "Login Successfully",

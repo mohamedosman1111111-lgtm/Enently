@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:evently/Providers/theme_provider.dart';
+import 'package:evently/models/user_model.dart';
 import 'package:evently/screens/auth/login.dart';
 import 'package:evently/utils/app_assets.dart';
 import 'package:evently/utils/app_colors.dart';
@@ -25,9 +26,9 @@ class _ProfileState extends State<Profile> {
           children: [
            Image.asset(AppAssets.profilepic),
             SizedBox(height: MediaQuery.of(context).size.height*0.018,),//16
-            Text("Mohamed Fawzy",style: Theme.of(context).textTheme.headlineMedium,),
+            Text(UserModel.loggedUser!.name,style: Theme.of(context).textTheme.headlineMedium,),
             SizedBox(height: MediaQuery.of(context).size.height*0.009,),
-            Text("johnsafwat.route@gmail.com",style: Theme.of(context).textTheme.labelSmall),
+            Text(UserModel.loggedUser!.email,style: Theme.of(context).textTheme.labelSmall),
             SizedBox(height: MediaQuery.of(context).size.height*0.0345,),//32
             Card(
 

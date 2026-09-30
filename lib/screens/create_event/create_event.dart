@@ -1,5 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:evently/models/category_model.dart';
+import 'package:evently/models/event_model.dart';
+import 'package:evently/models/user_model.dart';
 import 'package:evently/screens/auth/widgets/custom_text_buttom.dart';
 import 'package:evently/screens/widgets/custom_elevated_button.dart';
 import 'package:evently/screens/widgets/custom_tab_bar.dart';
@@ -7,6 +9,7 @@ import 'package:evently/screens/widgets/custom_text_field.dart';
 import 'package:evently/utils/app_assets.dart';
 import 'package:evently/utils/app_colors.dart';
 import 'package:evently/utils/extention/extentions.dart';
+import 'package:evently/utils/firebase_serviecs/firebase_serviecs.dart';
 import 'package:flutter/material.dart';
 
 class CreateEventScreen extends StatefulWidget {
@@ -17,8 +20,25 @@ class CreateEventScreen extends StatefulWidget {
 }
 
 class _CreateEventScreenState extends State<CreateEventScreen> {
+  late TextEditingController titleController;
+  late TextEditingController desController;
+  CategoryModel selectedCategory=CategoryModel.categories[0];
   DateTime currentDate=DateTime.now();
   TimeOfDay currentTime=TimeOfDay.now();
+  @override
+  void initState() {
+    // TODO: implement initState
+    titleController=TextEditingController();
+    desController=TextEditingController();
+    super.initState();
+  }
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    titleController.dispose();
+    desController.dispose();
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,6 +72,12 @@ appBar: AppBar(
             SizedBox(height: MediaQuery.of(context).size.height*0.018,),
 
             CustomTabBar(
+              currentCategory: (category){
+                setState(() {
+                  selectedCategory=category;
+                });
+
+              },
               categories:CategoryModel.categories,
               //TODO selected fr should be white
               selectedbg: Theme.of(context).primaryColor,
@@ -64,11 +90,11 @@ appBar: AppBar(
             SizedBox(height: MediaQuery.of(context).size.height*0.018,),//16
             Text("title".tr(),style: Theme.of(context).textTheme.titleMedium),
             SizedBox(height: MediaQuery.of(context).size.height*0.009,),//8
-            CustomTextField(hintText: "event_title".tr()),
+            CustomTextField(hintText: "event_title".tr(),controller: titleController,),
             SizedBox(height: MediaQuery.of(context).size.height*0.018,),
             Text("description".tr(),style: Theme.of(context).textTheme.titleMedium),
             SizedBox(height: MediaQuery.of(context).size.height*0.009,),//8
-            CustomTextField(hintText: "event_description".tr(),maxlines: 6,),
+            CustomTextField(hintText: "event_description".tr(),maxlines: 6,controller: desController,),
             SizedBox(height: MediaQuery.of(context).size.height*0.018,),//16
             Row(
               children: [
@@ -93,13 +119,23 @@ appBar: AppBar(
            Spacer(),
            // SizedBox(height: MediaQuery.of(context).size.height*0.044,),
             CustomElevatedButton(
-                onPress: (){},
+                onPress: _addEvent,
                 hintText: "add_event".tr())
 
           ],
         ),
       ),
     );
+
+  }
+  void _addEvent()async{
+    EventModel event=EventModel(id: "", category:selectedCategory, title: titleController.text, description: desController.text, date: currentDate, time: currentTime,ownerid: UserModel.loggedUser!.id);
+    await FirebaseServiecs.addEventToFireStore(event);
+    FirebaseServiecs.Tosta(
+        msg: "Event Created Successfully",
+        bgColor: Colors.green
+    );
+    Navigator.pop(context);
 
   }
   //TODO mabybe need to add coppy with late its not Error but we might need it

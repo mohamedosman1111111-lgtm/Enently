@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:evently/Providers/theme_provider.dart';
 import 'package:evently/models/category_model.dart';
 import 'package:evently/models/event_model.dart';
+import 'package:evently/models/user_model.dart';
 import 'package:evently/screens/widgets/custom_event_item.dart';
 import 'package:evently/screens/widgets/custom_tab_bar.dart';
 import 'package:evently/utils/app_assets.dart';
@@ -58,7 +59,7 @@ class Home extends StatelessWidget {
                 ],
               ),
               SizedBox(height: MediaQuery.of(context).size.height*0.005,), //4
-              Text("Mohamed Fawzy",style: Theme.of(context).textTheme.labelMedium,),
+              Text(UserModel.loggedUser!.name,style: Theme.of(context).textTheme.labelMedium,),
               SizedBox(height: MediaQuery.of(context).size.height*0.026,),//24
               CustomTabBar(
                 categories: [CategoryModel(id: "1",name: "all",icon: Icons.border_all,image: AppAssets.sportsLight),...CategoryModel.categories,],
@@ -73,7 +74,7 @@ class Home extends StatelessWidget {
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.only(top: 24),
-                  child: ListView.separated(itemBuilder: (context,index)=>CustomEventItem(event: EventModel(id: 1, category: CategoryModel.categories[0], title: "Teeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeest", description: "Teeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeest", date: DateTime.now(), time: TimeOfDay.now()),),
+                  child: ListView.separated(itemBuilder: (context,index)=>CustomEventItem(event: EventModel(id: "1", category: CategoryModel.categories[0], title: "Teeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeest", description: "Teeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeest", date: DateTime.now(), time: TimeOfDay.now(), ownerid: UserModel.loggedUser!.id),),
                       separatorBuilder:(context,index)=> SizedBox(height: MediaQuery.of(context).size.height*0.009 ,),
                       itemCount: 30),
                 ),

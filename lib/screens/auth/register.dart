@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:evently/models/user_model.dart';
 import 'package:evently/screens/auth/login.dart';
 import 'package:evently/screens/auth/widgets/Validators.dart';
 import 'package:evently/screens/auth/widgets/custom_text_buttom.dart';
@@ -19,6 +20,16 @@ class RegisterScreen extends StatefulWidget {
 
 class _RegisterScreenState extends State<RegisterScreen> {
   @override
+  void dispose() {
+    // TODO: implement dispose
+    nameController.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+    passwordConfirmtionController.dispose();
+
+    super.dispose();
+  }
+  @override
   void initState() {
     // TODO: implement initState
     nameController=TextEditingController();
@@ -38,49 +49,51 @@ class _RegisterScreenState extends State<RegisterScreen> {
       body: SafeArea(
         child: Form(
           key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Image.asset(AppAssets.eventlyLogoLight,color: Theme.of(context).primaryColor),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Text("register_title".tr(),style: Theme.of(context).textTheme.labelLarge,),
-              ),
-              SizedBox(height: MediaQuery.of(context).size.height*0.024,),
-              Padding(
-                padding: const EdgeInsets.only(left: 16,right: 16,bottom: 16),
-                child: CustomTextField(hintText: "enter_name".tr(),perfixIcon: Icon(Icons.person_outline,),controller: nameController,validator:Validators.validateName,),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 16,right: 16,bottom: 16),
-                child: CustomTextField(hintText: "enter_email".tr(),perfixIcon: Icon(Icons.email_outlined),controller: emailController,validator:Validators.validateEmail),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 16,right: 16,bottom: 16),
-                child: CustomTextField(hintText: "enter_password".tr(),perfixIcon:Icon(Icons.lock,), suffixIcon: Icon(Icons.visibility_off,),controller: passwordController,validator:Validators.validatePassword),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 16,right: 16,bottom: 16),
-                child: CustomTextField(hintText: "confirm_password".tr(),perfixIcon: Icon(Icons.lock,),suffixIcon: Icon(Icons.visibility_off),controller: passwordConfirmtionController,validator: Validators.validatePasswordConformtion(passwordController),),
-              ),
-
-              SizedBox(height: MediaQuery.of(context).size.height*0.055,),
-              CustomElevatedButton(onPress: (){
-                _createAccount();
-              },hintText: "signup".tr()),
-              SizedBox(height: MediaQuery.of(context).size.height*0.052,),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text("already_have_account".tr(),style: Theme.of(context).textTheme.labelSmall),
-                  CustomTextBottom(onTap:(){
-                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginScreen(),));
-                  }
-                  ,text: "login".tr())
-
-                ],
-              )
-            ],
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Image.asset(AppAssets.eventlyLogoLight,color: Theme.of(context).primaryColor),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Text("register_title".tr(),style: Theme.of(context).textTheme.labelLarge,),
+                ),
+                SizedBox(height: MediaQuery.of(context).size.height*0.024,),
+                Padding(
+                  padding: const EdgeInsets.only(left: 16,right: 16,bottom: 16),
+                  child: CustomTextField(hintText: "enter_name".tr(),perfixIcon: Icon(Icons.person_outline,),controller: nameController,validator:Validators.validateName,),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 16,right: 16,bottom: 16),
+                  child: CustomTextField(hintText: "enter_email".tr(),perfixIcon: Icon(Icons.email_outlined),controller: emailController,validator:Validators.validateEmail),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 16,right: 16,bottom: 16),
+                  child: CustomTextField(hintText: "enter_password".tr(),perfixIcon:Icon(Icons.lock,), suffixIcon: Icon(Icons.visibility_off,),controller: passwordController,validator:Validators.validatePassword),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 16,right: 16,bottom: 16),
+                  child: CustomTextField(hintText: "confirm_password".tr(),perfixIcon: Icon(Icons.lock,),suffixIcon: Icon(Icons.visibility_off),controller: passwordConfirmtionController,validator: Validators.validatePasswordConformtion(passwordController),),
+                ),
+            
+                SizedBox(height: MediaQuery.of(context).size.height*0.055,),
+                CustomElevatedButton(onPress: (){
+                  _createAccount();
+                },hintText: "signup".tr()),
+                SizedBox(height: MediaQuery.of(context).size.height*0.052,),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text("already_have_account".tr(),style: Theme.of(context).textTheme.labelSmall),
+                    CustomTextBottom(onTap:(){
+                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginScreen(),));
+                    }
+                    ,text: "login".tr())
+            
+                  ],
+                )
+              ],
+            ),
           ),
         ),
       ),
@@ -95,6 +108,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
             email: emailController.text,
             password: passwordController.text
         );
+        UserModel user=UserModel(id:userCredential.user!.uid, name: nameController.text, email: emailController.text);
+        //why set await before this line while its working without it
+        await FirebaseServiecs.addUserToFireStore(user);
         Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginScreen(),));
         FirebaseServiecs.Tosta(
             msg: "Register Successfully",

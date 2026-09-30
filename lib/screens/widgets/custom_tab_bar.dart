@@ -1,3 +1,4 @@
+
 import 'package:evently/models/category_model.dart';
 import 'package:evently/screens/widgets/custom_tab_item.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +11,7 @@ class CustomTabBar extends StatefulWidget {
   Color selectedicon;
   Color unselectedicon;
   Color unselectedfg;
+  void Function(CategoryModel)?currentCategory;
    CustomTabBar({
      super.key,required this.categories,
      required this.selectedbg,
@@ -18,6 +20,7 @@ class CustomTabBar extends StatefulWidget {
      required this.unselectedicon,
      required this.unselectedbg,
      required this.unselectedfg,
+     this.currentCategory
    });
 
   @override
@@ -35,6 +38,7 @@ class _CustomTabBarState extends State<CustomTabBar> {
             onTap: (newindex){
               setState(() {
                 selectedIndex=newindex;
+                widget.currentCategory?.call(widget.categories[selectedIndex]);
               });
 
             },

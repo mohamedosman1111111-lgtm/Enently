@@ -1,21 +1,26 @@
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:evently/Providers/theme_provider.dart';
+import 'package:evently/models/user_model.dart';
 import 'package:evently/screens/auth/login.dart';
 import 'package:evently/screens/auth/register.dart';
 import 'package:evently/screens/main_layout/main_layout.dart';
-import 'package:evently/screens/splash/splash_screen.dart';
 import 'package:evently/utils/app_routes.dart';
 import 'package:evently/utils/app_theme.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import 'utils/firebase_serviecs/firebase_serviecs.dart';
 
 void main()async{
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
   await Firebase.initializeApp();
-  print('🔥 Firebase OK: ${Firebase.app().options.appId}');
+  if(FirebaseAuth.instance.currentUser!=null){
+    UserModel.loggedUser=await FirebaseServiecs.getUserFromFireStore(FirebaseAuth.instance.currentUser!.uid);
+  }
   final themeProvider=AppThemeProvider();
   await themeProvider.initTheme();
   runApp(ChangeNotifierProvider.value(
@@ -38,9 +43,8 @@ class EventlyApp extends StatelessWidget {
       supportedLocales: context.supportedLocales,
       locale: context.locale,
       debugShowCheckedModeBanner: false,
-      initialRoute:AppRoutes.splashScreen,
+      initialRoute:FirebaseAuth.instance.currentUser==null?AppRoutes.login:AppRoutes.mainLayout,
       routes: {
-        AppRoutes.splashScreen: (context) =>  SplashScreen(),
         AppRoutes.login: (context) =>  LoginScreen(),
         AppRoutes.register:(context)=> RegisterScreen(),
         AppRoutes.mainLayout:(context)=> MainLayout(),
