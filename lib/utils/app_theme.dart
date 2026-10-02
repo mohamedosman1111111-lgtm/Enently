@@ -41,17 +41,20 @@ static ThemeData light=ThemeData(
 
   textTheme: TextTheme(
     labelLarge: TextStyle(fontSize: 24,fontWeight: FontWeight.w600,color: AppColors.primaryBlue),
-    labelMedium: TextStyle(fontSize: 20,fontWeight: FontWeight.w500,color: AppColors.mainText), //remeber it
+      labelMedium: TextStyle(fontSize: 20,fontWeight: FontWeight.w500,color: AppColors.mainText), //remeber it
     headlineMedium: TextStyle(fontSize: 20,fontWeight: FontWeight.w600,color: AppColors.mainText),//name in profile
     bodyMedium: TextStyle(fontSize: 16,fontWeight: FontWeight.w500,color: AppColors.white),
     titleMedium: TextStyle(fontSize: 16,fontWeight: FontWeight.w500,color: AppColors.mainText),
     displayMedium: TextStyle(fontSize: 16,fontWeight: FontWeight.w600,color: AppColors.primaryBlue),
+    headlineSmall: TextStyle(fontSize: 16,fontWeight: FontWeight.w400,color: AppColors.sectext),
     labelSmall: TextStyle(fontSize: 14,fontWeight: FontWeight.w400,color: AppColors.sectext), //email in profile
     bodySmall: TextStyle(fontSize: 14,fontWeight: FontWeight.w500,color: AppColors.mainText),
       displaySmall: TextStyle(fontSize: 14,fontWeight: FontWeight.w600,color: AppColors.mainText),
 
-      titleSmall: TextStyle(fontSize: 14,fontWeight: FontWeight.w600,color: AppColors.primaryBlue)
+      titleSmall: TextStyle(fontSize: 14,fontWeight: FontWeight.w600,color: AppColors.primaryBlue),
 
+      titleLarge: TextStyle(fontSize: 18,fontWeight: FontWeight.w500,color: AppColors.primaryBlue),
+      displayLarge: TextStyle(fontSize: 14,fontWeight: FontWeight.w600,color: AppColors.primaryBlue),
 
   ),
   inputDecorationTheme: InputDecorationTheme(
@@ -127,15 +130,20 @@ static ThemeData light=ThemeData(
 
     textTheme: TextTheme(
       labelLarge: TextStyle(fontSize: 24,fontWeight: FontWeight.w600,color: AppColors.white),
-      labelMedium: TextStyle(fontSize: 20,fontWeight: FontWeight.w500,color: AppColors.white),
+        labelMedium: TextStyle(fontSize: 20,fontWeight: FontWeight.w500,color: AppColors.white),
       headlineMedium: TextStyle(fontSize: 20,fontWeight: FontWeight.w600,color: AppColors.white),//name in profile
       bodyMedium: TextStyle(fontSize: 16,fontWeight: FontWeight.w500,color: AppColors.white),
         titleMedium: TextStyle(fontSize: 16,fontWeight: FontWeight.w500,color: AppColors.white),
         displayMedium: TextStyle(fontSize: 16,fontWeight: FontWeight.w600,color: AppColors.mainTextdark),
-      labelSmall: TextStyle(fontSize: 14,fontWeight: FontWeight.w400,color: AppColors.secTextDark), //email in profile
+        headlineSmall: TextStyle(fontSize: 16,fontWeight: FontWeight.w400,color: AppColors.secTextDark),
+        labelSmall: TextStyle(fontSize: 14,fontWeight: FontWeight.w400,color: AppColors.secTextDark), //email in profile
       bodySmall: TextStyle(fontSize: 14,fontWeight: FontWeight.w500,color: AppColors.white),
       displaySmall: TextStyle(fontSize: 14,fontWeight: FontWeight.w600,color: AppColors.white),
-      titleSmall: TextStyle(fontSize: 14,fontWeight: FontWeight.w600,color: AppColors.mainTextdark)
+      titleSmall: TextStyle(fontSize: 14,fontWeight: FontWeight.w600,color: AppColors.mainTextdark),
+
+        titleLarge: TextStyle(fontSize: 18,fontWeight: FontWeight.w500,color: AppColors.white),
+      displayLarge: TextStyle(fontSize: 14,fontWeight: FontWeight.w600,color: AppColors.white),
+
     ),
     inputDecorationTheme: InputDecorationTheme(
       filled: true,

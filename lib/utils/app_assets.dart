@@ -10,5 +10,14 @@ static const String meetingLight="assets/images/MeetingLight.png";
 static const String exhibitionLight="assets/images/ExhibitionLight.png";
 static const String profilepic="assets/images/Profile pic.png";
 
+static const String slide1 = "assets/images/slide1.png";
+static const String slide1dark = "assets/images/slide1dark.png";
+static const String slide2 = "assets/images/slide2.png";
+static const String slide2dark = "assets/images/slide2dark.png";
+static const String slide3 = "assets/images/slide3.png";
+static const String slide3dark = "assets/images/slide3dark.png";
+static const String slide4 = "assets/images/slide4.png";
+static const String slide4dark = "assets/images/slide4dark.png";
+
 
 }
