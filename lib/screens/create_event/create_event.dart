@@ -11,6 +11,9 @@ import 'package:evently/utils/app_colors.dart';
 import 'package:evently/utils/extention/extentions.dart';
 import 'package:evently/utils/firebase_serviecs/firebase_serviecs.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../../Providers/theme_provider.dart';
 
 class CreateEventScreen extends StatefulWidget {
   const CreateEventScreen({super.key});
@@ -41,6 +44,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
   }
   @override
   Widget build(BuildContext context) {
+  var themeProvider=Provider.of<AppThemeProvider>(context);
     return Scaffold(
 appBar: AppBar(
   leading: Padding(
@@ -67,7 +71,7 @@ appBar: AppBar(
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(16),
                   clipBehavior:Clip.hardEdge ,
-                  child: Image.asset(AppAssets.bookClubLight,fit: BoxFit.cover,)),
+                  child: Image.asset(themeProvider.isDark()?selectedCategory.darkImage:selectedCategory.image,fit: BoxFit.cover,)),
         ),
             SizedBox(height: MediaQuery.of(context).size.height*0.018,),
 

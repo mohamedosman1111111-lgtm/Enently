@@ -50,7 +50,8 @@ class OnBoardingItem extends StatelessWidget {
 
 
           Spacer(),
-          CustomElevatedButton(hintText: slides.buttonText,onPress: onButtom,)
+          CustomElevatedButton(hintText: slides.buttonText,onPress: onButtom,),
+          SizedBox(height: MediaQuery.of(context).size.height*0.026,),
         ],
       ),
     );

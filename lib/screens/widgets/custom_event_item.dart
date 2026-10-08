@@ -3,6 +3,9 @@ import 'package:evently/utils/app_assets.dart';
 import 'package:evently/utils/app_colors.dart';
 import 'package:evently/utils/extention/extentions.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../../Providers/theme_provider.dart';
 
 class CustomEventItem extends StatelessWidget {
   EventModel event;
@@ -10,13 +13,15 @@ class CustomEventItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var themeProvider=Provider.of<AppThemeProvider>(context);
+
     return Container(
       width: double.infinity,
       height: 193,
       decoration: BoxDecoration(
         image: DecorationImage(
           fit: BoxFit.fill,
-            image:AssetImage(event.category.image),
+            image:AssetImage(themeProvider.isDark()?event.category.darkImage:event.category.image),
           
         ),
         borderRadius: BorderRadius.circular(16),
