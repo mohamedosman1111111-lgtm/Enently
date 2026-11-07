@@ -39,7 +39,8 @@ class FirebaseServiecs {
     return userDoc.set({
       "id": user.id,
       "name": user.name,
-      "email": user.email
+      "email": user.email,
+      "favoriteEventsId":user.favoriteEventsId
     });
   }
 
@@ -52,8 +53,12 @@ class FirebaseServiecs {
     DocumentSnapshot<Map<String, dynamic>> documentSnapShot = await userDoc
         .get();
     Map<String, dynamic> json = documentSnapShot.data()!;
-    UserModel user = UserModel(id: json["id"], name:
-    json["name"], email: json["email"]);
+    UserModel user = UserModel(
+        id: json["id"],
+        name: json["name"],
+        email: json["email"],
+      favoriteEventsId: (json["favoriteEventsId"] as List<dynamic>).cast<String>()
+    );
     return user;
   }
 
@@ -113,17 +118,68 @@ yield* events;
 
   }
 
+static Future<void> addEventToFavorite(EventModel event){
+UserModel currentUser=UserModel.loggedUser!;
+currentUser.favoriteEventsId.add(event.id);
+FirebaseFirestore db = FirebaseFirestore.instance;
+CollectionReference<Map<String, dynamic>>userCollection = db.collection("Users");
+DocumentReference<Map<String, dynamic>> userDoc = userCollection.doc(currentUser.id);
+
+return userDoc.update({
+
+  "favoriteEventsId": FieldValue.arrayUnion([event.id]),
+});
+}
+static Future<void> removeEventToFavorite(EventModel event){
+UserModel currentUser=UserModel.loggedUser!;
+currentUser.favoriteEventsId.remove(event.id);
+FirebaseFirestore db = FirebaseFirestore.instance;
+CollectionReference<Map<String, dynamic>>userCollection = db.collection("Users");
+DocumentReference<Map<String, dynamic>> userDoc = userCollection.doc(currentUser.id);
+
+return userDoc.update({
+
+  "favoriteEventsId": currentUser.favoriteEventsId,
+});
+}
+
+  static Stream<List<EventModel>> getFavoriteEventFromFireStoreRealUpdate()async*{
+    FirebaseFirestore db = FirebaseFirestore.instance;
+    CollectionReference<Map<String, dynamic>> eventCollection = db.collection("Events");
+    Stream<QuerySnapshot<Map<String, dynamic>>> collectionSnapShots=eventCollection.snapshots();
+
+    Stream<List<EventModel>> events=collectionSnapShots.map((querySnapShot)=>querySnapShot.docs.map((docSnapShot){
+      Map<String,dynamic>json=docSnapShot.data();
+
+      final category = CategoryModel.categories.firstWhere(
+            (category) => category.id == json["categoryID"],
+        orElse: () => CategoryModel.categories[0],
+      );
+
+      final DateTime date = (json["date"] as Timestamp).toDate();
+
+      final timeParts = (json["time"] as String).split(":");
+      final TimeOfDay time = TimeOfDay(
+        hour: int.parse(timeParts[0]),
+        minute: int.parse(timeParts[1]),
+      );
+
+      return EventModel(
+        id: json["id"],
+        category: category,
+        title: json["title"],
+        description: json["description"],
+        date: date,
+        time: time,
+        ownerid: json["ownerID"],
+      );
 
 
+    }).toList());
 
+    yield* events;
 
-
-
-
-
-
-
-
+  }
 
 
 

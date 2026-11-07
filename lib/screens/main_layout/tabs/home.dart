@@ -90,28 +90,28 @@ class _HomeState extends State<Home> {
                 unselectedicon:Theme.of(context).primaryColor ,
                    ),
 
-              StreamBuilder(
-                  stream: FirebaseServiecs.getEventFromFireStoreRealUpdate(selectedCategory),
-                  builder: (context,snapshot){
-                if(snapshot.connectionState==ConnectionState.waiting){
-                  return Center(child: CircularProgressIndicator());
-                }
-                if(snapshot.hasError){
-                  return Center(child: Text("Error Occurred",style: Theme.of(context).textTheme.labelLarge,),);
-                }
-                List<EventModel> events = snapshot.data ?? [];
-                if (events.isEmpty) {
-                  return Center(child: Text("No Events Yet",style: Theme.of(context).textTheme.labelLarge,));
-                }
-                return   Expanded(
-                  child: Padding(
+              Expanded(
+                child: StreamBuilder(
+                    stream: FirebaseServiecs.getEventFromFireStoreRealUpdate(selectedCategory),
+                    builder: (context,snapshot){
+                  if(snapshot.connectionState==ConnectionState.waiting){
+                    return Center(child: CircularProgressIndicator());
+                  }
+                  if(snapshot.hasError){
+                    return Center(child: Text("Error Occurred",style: Theme.of(context).textTheme.labelLarge,),);
+                  }
+                  List<EventModel> events = snapshot.data ?? [];
+                  if (events.isEmpty) {
+                    return Center(child: Text("No Events Yet",style: Theme.of(context).textTheme.labelLarge,));
+                  }
+                  return   Padding(
                     padding: const EdgeInsets.only(top: 24),
-                    child: ListView.separated(itemBuilder: (context,index)=>CustomEventItem(event:events[index],),
+                    child: ListView.separated(itemBuilder: (context,index)=>CustomEventItem(event:events[index],isFavorite: UserModel.loggedUser!.favoriteEventsId.contains(events[index].id),),
                         separatorBuilder:(context,index)=> SizedBox(height: MediaQuery.of(context).size.height*0.009 ,),
                         itemCount: events.length),
-                  ),
-                );
-                  })
+                  );
+                    }),
+              )
 
 
 
