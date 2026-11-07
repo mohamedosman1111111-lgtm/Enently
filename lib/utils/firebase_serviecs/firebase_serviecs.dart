@@ -1,12 +1,26 @@
 
+import 'dart:io' show Platform;
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evently/models/category_model.dart';
 import 'package:evently/models/event_model.dart';
 import 'package:evently/models/user_model.dart';
 import 'package:evently/utils/app_colors.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+
+/// iOS-only configuration for google_sign_in 7.x.
+/// Leave these null on Android/Web (the native flow reads them from
+/// google-services.json / Firebase config). Fill them after adding a
+/// "Google" OAuth client in the Firebase console for your iOS bundle id.
+class GoogleAuth {
+  static const String? iOsClientId = null; // e.g. "XXXX.apps.googleusercontent.com"
+  static const String? restClientId = null; // OAuth REST client id (iOS)
+  static const String? redirectUri = null; // e.g. "com.example.evently:/oauth2redirect"
+}
 
 class FirebaseServiecs {
   static Future <UserCredential> createAccount(
@@ -16,6 +30,66 @@ class FirebaseServiecs {
       email: email,
       password: password,
     );
+    return userCredential;
+  }
+
+  /// Signs in the user with their Google account and links/creates
+  /// a Firebase Auth session using the resulting Google credentials.
+  static Future<UserCredential> signInWithGoogle() async {
+    // Web uses the built-in Firebase popup flow.
+    if (kIsWeb) {
+      final GoogleAuthProvider googleProvider = GoogleAuthProvider();
+      googleProvider.addScope('https://www.googleapis.com/auth/userinfo.email');
+      googleProvider.addScope('https://www.googleapis.com/auth/userinfo.profile');
+      return FirebaseAuth.instance.signInWithPopup(googleProvider);
+    }
+
+    // Trigger the authentication flow (native platforms).
+    final GoogleSignIn googleSignIn = GoogleSignIn(
+      // clientId & serverClientId are required on iOS only;
+      // on Android they are read from google-services.json.
+      clientId: Platform.isIOS ? GoogleAuth.iOsClientId : null,
+      serverClientId: Platform.isIOS ? GoogleAuth.restClientId : null,
+    );
+    final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
+
+    if (googleUser == null) {
+      throw FirebaseAuthException(
+        code: 'user-cancelled',
+        message: 'Google sign-in was cancelled',
+      );
+    }
+
+    // Obtain the auth details from the request.
+    final GoogleSignInAuthentication googleAuth =
+        await googleUser.authentication;
+
+    // Create a new credential for Firebase.
+    final OAuthCredential credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth.accessToken,
+      idToken: googleAuth.idToken,
+    );
+
+    UserCredential userCredential =
+        await FirebaseAuth.instance.signInWithCredential(credential);
+
+    // Make sure the user has a document in the "Users" collection.
+    final user = userCredential.user;
+    if (user != null) {
+      FirebaseFirestore db = FirebaseFirestore.instance;
+      DocumentReference<Map<String, dynamic>> userDoc =
+          db.collection("Users").doc(user.uid);
+      DocumentSnapshot<Map<String, dynamic>> snapshot = await userDoc.get();
+      if (!snapshot.exists) {
+        await addUserToFireStore(UserModel(
+          id: user.uid,
+          name: user.displayName ?? user.email ?? 'Unknown',
+          email: user.email ?? '',
+        ));
+      }
+      UserModel.loggedUser = await getUserFromFireStore(user.uid);
+    }
+
     return userCredential;
   }
 

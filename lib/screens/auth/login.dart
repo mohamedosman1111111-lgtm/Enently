@@ -77,6 +77,23 @@ class _LoginScreenState extends State<LoginScreen> {
 
 
               },hintText: "login".tr()),
+              SizedBox(height: MediaQuery.of(context).size.height*0.03,),
+              // Google Sign In button
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: OutlinedButton.icon(
+                  onPressed: () {
+                    _loginWithGoogle();
+                  },
+                  icon: const Icon(Icons.account_circle_outlined),
+                  label: Text("login_with_google".tr(),
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),),
+                  style: OutlinedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    side: BorderSide(color: Theme.of(context).primaryColor),
+                  ),
+                ),
+              ),
               SizedBox(height: MediaQuery.of(context).size.height*0.052,),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -142,8 +159,50 @@ class _LoginScreenState extends State<LoginScreen> {
 
         );
       }
-      }
-
     }
   }
 
+
+  void _loginWithGoogle() async {
+    try {
+      await FirebaseServiecs.signInWithGoogle();
+      if (!mounted) return;
+      Navigator.pushReplacement(context,
+          MaterialPageRoute(builder: (context) => MainLayout(),));
+      FirebaseServiecs.Tosta(
+          msg: "Login with Google Successfully",
+          bgColor: Colors.green
+      );
+    } on FirebaseAuthException catch (exception) {
+      if (exception.code == "user-cancelled" ||
+          exception.code == "canceled-pop-up") {
+        // User dismissed the Google account picker: do nothing.
+        return;
+      } else if (exception.code == "network-request-failed") {
+        FirebaseServiecs.Tosta(
+            msg: "No Internet Connection",
+            bgColor: Colors.red
+
+        );
+      } else if (exception.code == "account-exists-with-different-credential") {
+        FirebaseServiecs.Tosta(
+            msg: "This email is already registered with another sign-in method",
+            bgColor: Colors.red
+
+        );
+      } else {
+        FirebaseServiecs.Tosta(
+            msg: "UnExpected Error: ${exception.code}",
+            bgColor: Colors.red
+
+        );
+      }
+    } catch (exception) {
+      FirebaseServiecs.Tosta(
+          msg: exception.toString(),
+          bgColor: Colors.red
+
+      );
+    }
+  }
+}
