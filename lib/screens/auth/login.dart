@@ -1,53 +1,149 @@
+import 'package:easy_localization/easy_localization.dart';
+import 'package:evently/models/user_model.dart';
+import 'package:evently/screens/auth/register.dart';
+import 'package:evently/screens/auth/widgets/Validators.dart';
 import 'package:evently/screens/auth/widgets/custom_text_buttom.dart';
+import 'package:evently/screens/main_layout/main_layout.dart';
 import 'package:evently/screens/widgets/custom_elevated_button.dart';
 import 'package:evently/screens/widgets/custom_text_field.dart';
 import 'package:evently/utils/app_assets.dart';
+import 'package:evently/utils/firebase_serviecs/firebase_serviecs.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  late TextEditingController emailController;
+  late TextEditingController passwordController;
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+  @override
+  void initState() {
+    emailController=TextEditingController();
+    passwordController=TextEditingController();
+    // TODO: implement initState
+    super.initState();
+  }
+  GlobalKey <FormState> _formKey=GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Image.asset(AppAssets.EventlyLogoLight),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Text("Login to your account",style: Theme.of(context).textTheme.labelLarge,),
-            ),
-            SizedBox(height: 24,),
-            CustomTextField(hintText: "Enter your email",perfixIcon: Icons.email_outlined,),
-            CustomTextField(hintText: "Enter your password",perfixIcon: Icons.lock,suffixIcon: Icon(Icons.visibility),),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Row(
-                children: [
-                  Spacer(),
-                  CustomTextBottom(onTap:(){},text: "Forget Password? ")
-                ],
+        child: Form(
+          key:_formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Image.asset(AppAssets.eventlyLogoLight,color: Theme.of(context).primaryColor,),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Text("login_title".tr(),style: Theme.of(context).textTheme.labelLarge,),
               ),
-            ),
-            SizedBox(height: 48,),
-            CustomElevatedButton(onTap: (){},hintText: "Login"),
-            SizedBox(height: 48,),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text("Don’t have an account ?"),
-                CustomTextBottom(onTap:(){},text: " Signup")
+              SizedBox(height: MediaQuery.of(context).size.height*0.024,),
+              Padding(
+                padding: const EdgeInsets.only(left: 16,right: 16,bottom: 16),
+                child: CustomTextField(hintText: "enter_email".tr(),perfixIcon: Icon(Icons.email_outlined),controller: emailController,validator: Validators.validateEmail,),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 16,right: 16,bottom: 16),
+                child: CustomTextField(hintText: "enter_password".tr(),perfixIcon: Icon(Icons.lock),suffixIcon: Icon(Icons.visibility_off),controller: passwordController,validator: Validators.validatePassword,),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Row(
+                  children: [
+                    Spacer(),
+                    CustomTextBottom(onTap:(){},text: "forget_password".tr())
+                  ],
+                ),
+              ),
+              SizedBox(height: MediaQuery.of(context).size.height*0.052,),
+              CustomElevatedButton(onPress: (){
+                _loginAccount();
 
-              ],
-            )
-          ],
+
+              },hintText: "login".tr()),
+              SizedBox(height: MediaQuery.of(context).size.height*0.052,),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text("dont_have_account".tr(),style: Theme.of(context).textTheme.labelSmall,),
+                  CustomTextBottom(onTap:(){
+                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => RegisterScreen(),));
+                  },
+                      text: "signup".tr())
+
+                ],
+              )
+            ],
+          ),
         ),
       ),
-
     );
 
   }
-}
+  void _loginAccount()async{
+    if(_formKey.currentState!.validate()) {
+      try {
+        UserCredential userCredential=await FirebaseAuth.instance.signInWithEmailAndPassword(
+            email: emailController.text,
+            password: passwordController.text
+        );
+        //why set await before this line while its working without it
+        UserModel user= await FirebaseServiecs.getUserFromFireStore(userCredential.user!.uid);
+        UserModel.loggedUser=user;
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MainLayout(),));
+        FirebaseServiecs.Tosta(
+            msg: "Login Successfully",
+          bgColor: Colors.green
+
+        );
+      } on FirebaseAuthException catch(exception){
+        if(exception.code=="invalid-credential"){
+          FirebaseServiecs.Tosta(
+              msg: "Wrong Email or Password",
+              bgColor: Colors.red
+
+          );
+        }
+        else if(exception.code=="network-request-failed"){
+          FirebaseServiecs.Tosta(
+              msg: "No Internet Connection",
+              bgColor: Colors.red
+
+          );
+        }
+
+        else{
+          FirebaseServiecs.Tosta(
+              msg: "UnExpected Error: ${exception.code}",
+              bgColor: Colors.red
+
+          );
+        }
+      }catch(exception){
+        FirebaseServiecs.Tosta(
+            msg: exception.toString(),
+            bgColor: Colors.red
+
+        );
+      }
+      }
+
+    }
+  }
+
