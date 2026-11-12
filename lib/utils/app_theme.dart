@@ -55,6 +55,8 @@ static ThemeData light=ThemeData(
 
       titleLarge: TextStyle(fontSize: 18,fontWeight: FontWeight.w500,color: AppColors.primaryBlue),
       displayLarge: TextStyle(fontSize: 14,fontWeight: FontWeight.w600,color: AppColors.primaryBlue),
+    bodyLarge: TextStyle(fontSize: 16,fontWeight: FontWeight.w500,color: AppColors.mainText),
+
 
   ),
   inputDecorationTheme: InputDecorationTheme(
@@ -143,6 +145,8 @@ static ThemeData light=ThemeData(
 
         titleLarge: TextStyle(fontSize: 18,fontWeight: FontWeight.w500,color: AppColors.white),
       displayLarge: TextStyle(fontSize: 14,fontWeight: FontWeight.w600,color: AppColors.white),
+      bodyLarge: TextStyle(fontSize: 16,fontWeight: FontWeight.w500,color: AppColors.mainTextdark),
+
 
     ),
     inputDecorationTheme: InputDecorationTheme(

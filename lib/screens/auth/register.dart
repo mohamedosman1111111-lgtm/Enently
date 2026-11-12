@@ -43,6 +43,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
   late TextEditingController emailController;
   late TextEditingController passwordController;
   late TextEditingController passwordConfirmtionController;
+  void _signupWithGoogle() async {
+    try {
+      UserCredential? userCredential = await FirebaseServiecs.signInWithGoogle();
+      if (userCredential != null) {
+        FirebaseServiecs.Tosta(msg: "Register Successfully", bgColor: Colors.green);
+        // Return to login or go to main layout
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginScreen()));
+      }
+    } catch (e) {
+      FirebaseServiecs.Tosta(msg: e.toString(), bgColor: Colors.red);
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -91,7 +103,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ,text: "login".tr())
             
                   ],
-                )
+                ),
+                SizedBox(height: MediaQuery.of(context).size.height*0.052,),
+                Center(child: Text("Or".tr(), style: Theme.of(context).textTheme.labelSmall,)),
+                SizedBox(height: MediaQuery.of(context).size.height*0.024,),
+                CustomElevatedButton(
+                  hintText: "signup_with_google".tr(),
+                  icon: Image.asset(AppAssets.google, height: 24, width: 24),
+                  onPress: () {
+                    _signupWithGoogle();
+                  },
+
+                ),
               ],
             ),
           ),

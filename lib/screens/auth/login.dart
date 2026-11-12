@@ -38,6 +38,21 @@ class _LoginScreenState extends State<LoginScreen> {
     super.initState();
   }
   GlobalKey <FormState> _formKey=GlobalKey<FormState>();
+  void _loginWithGoogle() async {
+    try {
+      UserCredential? userCredential = await FirebaseServiecs.signInWithGoogle();
+      if (userCredential != null) {
+        // Get user data
+        UserModel user = await FirebaseServiecs.getUserFromFireStore(userCredential.user!.uid);
+        UserModel.loggedUser = user;
+
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MainLayout()));
+        FirebaseServiecs.Tosta(msg: "Login Successfully", bgColor: Colors.green);
+      }
+    } catch (e) {
+      FirebaseServiecs.Tosta(msg: e.toString(), bgColor: Colors.red);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -88,7 +103,18 @@ class _LoginScreenState extends State<LoginScreen> {
                       text: "signup".tr())
 
                 ],
-              )
+              ),
+              SizedBox(height: MediaQuery.of(context).size.height*0.052,),
+              Center(child: Text("Or".tr(), style: Theme.of(context).textTheme.labelSmall,)),
+              SizedBox(height: MediaQuery.of(context).size.height*0.024,),
+              CustomElevatedButton(
+                hintText: "login_with_google".tr(),
+                icon: Image.asset(AppAssets.google, height: 24, width: 24),
+                onPress: () {
+                  _loginWithGoogle();
+                },
+              ),
+
             ],
           ),
         ),

@@ -7,8 +7,67 @@ import 'package:evently/utils/app_colors.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class FirebaseServiecs {
+  static final GoogleSignIn _googleSignIn = GoogleSignIn(
+    scopes: ['email', 'profile'],
+  );
+  static Future<UserCredential?> signInWithGoogle() async {
+    try {
+      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+      if (googleUser == null) return null; // User canceled the sign-in
+
+      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      UserCredential userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
+
+      DocumentSnapshot userDoc = await FirebaseFirestore.instance
+          .collection('Users')
+          .doc(userCredential.user!.uid)
+          .get();
+
+      if (!userDoc.exists) {
+        UserModel newUser = UserModel(
+          id: userCredential.user!.uid,
+          name: userCredential.user!.displayName ?? '',
+          email: userCredential.user!.email ?? '',
+          favoriteEventsId: [],
+        );
+        await addUserToFireStore(newUser);
+      } else {
+        UserModel user = await getUserFromFireStore(userCredential.user!.uid);
+        UserModel.loggedUser = user;
+      }
+
+      return userCredential;
+    } catch (e) {
+      Tosta(msg: "Google Sign In Error: ${e.toString()}", bgColor: Colors.red);
+      return null;
+    }
+  }
+
+
+  static Future<void> signOut() async {
+    try {
+      await _googleSignIn.signOut();
+
+      await FirebaseAuth.instance.signOut();
+
+      UserModel.loggedUser = null;
+    } catch (e) {
+      Tosta(msg: "Error signing out: ${e.toString()}", bgColor: Colors.red);
+    }
+  }
+
+
+
+  ///=====================================================
   static Future <UserCredential> createAccount(
       {required String email, required String password}) async {
     UserCredential userCredential = await FirebaseAuth.instance
@@ -61,6 +120,8 @@ class FirebaseServiecs {
     );
     return user;
   }
+
+
 
   static Future<void> addEventToFireStore(EventModel event) {
     FirebaseFirestore db = FirebaseFirestore.instance;
@@ -117,6 +178,8 @@ class FirebaseServiecs {
 yield* events;
 
   }
+
+
 
 static Future<void> addEventToFavorite(EventModel event){
 UserModel currentUser=UserModel.loggedUser!;
@@ -181,6 +244,34 @@ return userDoc.update({
 
   }
 
+  static Future<void> deleteEvent(String eventId) async {
+    try {
+      FirebaseFirestore db = FirebaseFirestore.instance;
+      CollectionReference eventCollection = db.collection("Events");
+      await eventCollection.doc(eventId).delete();
+      Tosta(msg: "Event deleted successfully", bgColor: Colors.green);
+    } catch (e) {
+      Tosta(msg: "Error deleting event: ${e.toString()}", bgColor: Colors.red);
+      rethrow;
+    }
+  }
 
+  static Future<void> updateEvent(EventModel event) async {
+    try {
+      FirebaseFirestore db = FirebaseFirestore.instance;
+      CollectionReference eventCollection = db.collection("Events");
+      await eventCollection.doc(event.id).update({
+        "title": event.title,
+        "description": event.description,
+        "date": Timestamp.fromDate(event.date),
+        "time": "${event.time.hour.toString().padLeft(2, '0')}:${event.time.minute.toString().padLeft(2, '0')}",
+        "categoryID": event.category.id,
+      });
+      Tosta(msg: "Event updated successfully", bgColor: Colors.green);
+    } catch (e) {
+      Tosta(msg: "Error updating event: ${e.toString()}", bgColor: Colors.red);
+      rethrow;
+    }
+  }
 
 }
