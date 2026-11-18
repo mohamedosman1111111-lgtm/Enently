@@ -94,11 +94,30 @@ appBar: AppBar(
             SizedBox(height: MediaQuery.of(context).size.height*0.018,),//16
             Text("title".tr(),style: Theme.of(context).textTheme.titleMedium),
             SizedBox(height: MediaQuery.of(context).size.height*0.009,),//8
-            CustomTextField(hintText: "event_title".tr(),controller: titleController,),
+            CustomTextField(
+              hintText: "Event title",
+              controller: titleController,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return "Please enter event title";
+                }
+                return null;
+              },
+            ),
             SizedBox(height: MediaQuery.of(context).size.height*0.018,),
             Text("description".tr(),style: Theme.of(context).textTheme.titleMedium),
             SizedBox(height: MediaQuery.of(context).size.height*0.009,),//8
-            CustomTextField(hintText: "event_description".tr(),maxlines: 6,controller: desController,),
+            CustomTextField(
+              hintText: "Event description",
+              controller: desController,
+              maxlines: 4,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return "Please enter event description";
+                }
+                return null;
+              },
+            ),
             SizedBox(height: MediaQuery.of(context).size.height*0.018,),//16
             Row(
               children: [

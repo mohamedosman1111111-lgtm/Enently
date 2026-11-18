@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 
 class CustomElevatedButton extends StatelessWidget {
   String hintText;
+  final Widget? icon;
+
   VoidCallback onPress;
-   CustomElevatedButton({super.key,required this.hintText,required this.onPress});
+   CustomElevatedButton({super.key,required this.hintText,required this.onPress,this.icon});
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +15,30 @@ class CustomElevatedButton extends StatelessWidget {
       child: ElevatedButton(
 
           onPressed: onPress,
-          child: Text(hintText,style:TextStyle(fontSize: 20,fontWeight: FontWeight.w500,color: AppColors.white),),),
-    );
+        child: icon != null
+            ? Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            icon!,
+            SizedBox(width: 8),
+            Text(
+              hintText,
+              style: TextStyle(
+                color:AppColors.white,
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ],
+        )
+            : Text(
+          hintText,
+          style: TextStyle(
+            color: AppColors.white,
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+    ));
   }
 }

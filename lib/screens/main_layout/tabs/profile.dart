@@ -120,8 +120,8 @@ class _ProfileState extends State<Profile> {
     );
   }
   void _logout()async{
-   await FirebaseAuth.instance.signOut();
-   Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginScreen(),));
+    await FirebaseServiecs.signOut();
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginScreen(),));
    FirebaseServiecs.Tosta(
        msg: "Logout Successfully",
        bgColor: Colors.green
